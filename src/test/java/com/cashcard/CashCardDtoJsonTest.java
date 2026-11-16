@@ -10,20 +10,14 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-class CashCardJsonTest {
+class CashCardDtoJsonTest {
 
     @Autowired
-    private JacksonTester<CashCard> json;
-
-    @Test
-    void myFirst() {
-        //IMPORTANT: for testing we use AssertJ
-        assertThat(1).isEqualTo(1);
-    }
+    private JacksonTester<CashCardDto> json;
 
     @Test
     void CashCardSerializationTest() throws IOException {
-        CashCard cashcard = new CashCard(22L,23.6);
+        CashCardDto cashcard = new CashCardDto(22L,23.6);
         assertThat(json.write(cashcard)).isStrictlyEqualToJson("expected.json");
 
         assertThat(json.write(cashcard)).hasJsonPathNumberValue("@.id");
@@ -41,7 +35,7 @@ class CashCardJsonTest {
                   "balance": 23.6
                 }
                 """;
-        assertThat(json.parse(expected)).isEqualTo(new CashCard(22L,23.6));
+        assertThat(json.parse(expected)).isEqualTo(new CashCardDto(22L,23.6));
         assertThat(json.parseObject(expected).id()).isEqualTo(22);
         assertThat(json.parseObject(expected).balance()).isEqualTo(23.6);
     }
