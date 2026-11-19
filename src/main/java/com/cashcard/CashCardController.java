@@ -2,6 +2,9 @@ package com.cashcard;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/cashcard")
@@ -21,6 +24,12 @@ class CashCardController {
     @PostMapping()
     ResponseEntity<CashCardDto> createCahsCard(@RequestBody CashCardDto cashCard){
         CashCardDto cashCardDto = this.cashCardService.createCashCard(cashCard);
-        return ResponseEntity.ok(cashCardDto);
+        // for post endpoint we need to return a location uri and optionally the dto as well.
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(cashCardDto.id())
+                .toUri();
+        return ResponseEntity.created(location).body(cashCardDto);
     }
 }
