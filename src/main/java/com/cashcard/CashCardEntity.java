@@ -17,6 +17,7 @@ public class CashCardEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column
     double balance;
+    @Column(nullable = false)
+    String owner; //Important: improve this by making it its own entity.
 }

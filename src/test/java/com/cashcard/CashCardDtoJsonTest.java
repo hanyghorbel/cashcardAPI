@@ -25,9 +25,9 @@ class CashCardDtoJsonTest {
     @BeforeEach
     void setUp(){
         this.cashCards = Arrays.array(
-                new CashCardDto(22L,23.6),
-                new CashCardDto(100L, 1.00),
-                new CashCardDto(101L, 150.00)
+                new CashCardDto(22L,23.6, "sarah"),
+                new CashCardDto(100L, 1.00, "sarah"),
+                new CashCardDto(101L, 150.00, "sarah")
         );
     }
 
@@ -48,7 +48,8 @@ class CashCardDtoJsonTest {
         String expected= """
                 {
                   "id": 22,
-                  "balance": 23.6
+                  "balance": 23.6,
+                  "owner": "sarah"
                 }
                 """;
         assertThat(json.parse(expected)).isEqualTo(this.cashCards[0]);
@@ -67,15 +68,18 @@ class CashCardDtoJsonTest {
                 [
                   {
                     "id": 22,
-                    "balance": 23.6
+                    "balance": 23.6,
+                    "owner": "sarah"
                   },
                   {
                     "id": 100,
-                    "balance": 1.00
+                    "balance": 1.00,
+                    "owner": "sarah"
                   },
                   {
                     "id": 101,
-                    "balance": 150.00
+                    "balance": 150.00,
+                    "owner": "sarah"
                   }
                 ]
                 """;

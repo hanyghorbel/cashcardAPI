@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,14 +19,14 @@ class CashCardController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<CashCardDto> getCashCard(@PathVariable Long id) {
-        CashCardDto cashCardDto = this.cashCardService.getCashCard(id);
+    ResponseEntity<CashCardDto> getCashCard(@PathVariable Long id, Principal principal) {
+        CashCardDto cashCardDto = this.cashCardService.getCashCard(id, principal);
         return ResponseEntity.ok(cashCardDto);
     }
 
     @PostMapping()
-    ResponseEntity<CashCardDto> createCahsCard(@RequestBody CashCardDto cashCard){
-        CashCardDto cashCardDto = this.cashCardService.createCashCard(cashCard);
+    ResponseEntity<CashCardDto> createCashCard(@RequestBody CashCardDto cashCard, Principal principal){
+        CashCardDto cashCardDto = this.cashCardService.createCashCard(cashCard, principal);
         // for post endpoint we need to return a location uri and optionally the dto as well.
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -35,8 +36,8 @@ class CashCardController {
         return ResponseEntity.created(location).body(cashCardDto);
     }
     @GetMapping()
-    ResponseEntity<List<CashCardDto>> getAllCashCards(Pageable pageable){
-        List<CashCardDto> cashCards = this.cashCardService.getAllCashCards(pageable);
+    ResponseEntity<List<CashCardDto>> getAllCashCards(Pageable pageable, Principal principal){
+        List<CashCardDto> cashCards = this.cashCardService.getAllCashCards(pageable, principal);
         return ResponseEntity.ok(cashCards);
     }
 }
