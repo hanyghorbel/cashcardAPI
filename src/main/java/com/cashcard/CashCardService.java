@@ -1,6 +1,7 @@
 package com.cashcard;
 
 import exceptions.CashCardNotFoundExcpetion;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -59,5 +60,16 @@ class CashCardService {
                 entity.getBalance(),
                 entity.getOwner()
         );
+    }
+    @Transactional // ensures the read, modfiy, update happens in one transaction
+    public CashCardDto replaceCashCard(Long id, CashCardDto cashCardDto, String username) {
+        CashCardEntity cashCard = this.cashCardRepository.findByIdAndOwner(id, username).orElseThrow(() -> new CashCardNotFoundExcpetion(id));
+        cashCard.setBalance(cashCardDto.balance());
+        CashCardEntity saved = this.cashCardRepository.save(cashCard);
+        return this.toDto(saved);
+    }
+
+    public void deleteCashCard(Long id, String name) {
+        this.cashCardRepository.deleteByIdAndOwner(id, name);
     }
 }

@@ -20,12 +20,18 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) {
         http
             .authorizeHttpRequests(request -> request
-                    .requestMatchers("/cashcard/**")
-                    .hasRole("CARD-OWNER"))
+                    .requestMatchers("/error").permitAll()
+                    .requestMatchers("/cashcard/**").hasRole("CARD-OWNER")
+                    .anyRequest().authenticated())
             .httpBasic(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable); // IMPORTANT: check to how to disable csrf
         return http.build();
     }
+    /*
+    If we handle exceptions directly in @RestControllerAdvice,
+    requests that match an @ExceptionHandler never even need /error;
+    /error mainly acts as a fallback for unhandled errors or filter/container errors.
+     */
 
     @Bean
     PasswordEncoder passwordEncoder(){
