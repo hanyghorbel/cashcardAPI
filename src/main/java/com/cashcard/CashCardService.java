@@ -53,14 +53,6 @@ class CashCardService {
                 .toList();
     }
 
-    // helper method
-    private CashCardDto toDto(CashCardEntity entity) {
-        return new CashCardDto(
-                entity.getId(),
-                entity.getBalance(),
-                entity.getOwner()
-        );
-    }
     @Transactional // ensures the read, modfiy, update happens in one transaction
     public CashCardDto replaceCashCard(Long id, CashCardDto cashCardDto, String username) {
         CashCardEntity cashCard = this.cashCardRepository.findByIdAndOwner(id, username).orElseThrow(() -> new CashCardNotFoundExcpetion(id));
@@ -71,5 +63,14 @@ class CashCardService {
 
     public void deleteCashCard(Long id, String name) {
         this.cashCardRepository.deleteByIdAndOwner(id, name);
+    }
+
+    // helper method
+    private CashCardDto toDto(CashCardEntity entity) {
+        return new CashCardDto(
+                entity.getId(),
+                entity.getBalance(),
+                entity.getOwner()
+        );
     }
 }
