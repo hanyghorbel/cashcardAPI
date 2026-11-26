@@ -61,8 +61,8 @@ class CashCardService {
         return this.toDto(saved);
     }
 
-    public void deleteCashCard(Long id, String name) {
-        this.cashCardRepository.deleteByIdAndOwner(id, name);
+    public boolean deleteCashCard(Long id, String name) {
+        return this.cashCardRepository.deleteByIdAndOwner(id, name) > 0;
     }
 
     // helper method

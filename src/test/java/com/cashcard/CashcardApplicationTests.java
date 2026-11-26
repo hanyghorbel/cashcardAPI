@@ -219,4 +219,32 @@ class CashcardApplicationTests {
 				.exchange("/cashcard/102", HttpMethod.PUT, request, Void.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
+
+	@Test
+	void shouldDeleteACashCard(){
+		// cashcard with balance 23.6 and owner sarah
+		CashCardEntity cashCard = this.cashCardRepository.save(CashCardEntity.builder().balance(23.6).owner("sarah").build());
+		ResponseEntity<Void> response = restTemplate
+				.withBasicAuth("sarah", "abc123")
+				.exchange("cashcard/"+cashCard.getId(),HttpMethod.DELETE,null,Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+	}
+
+	@Test
+	void shouldNotDeleteACashCardThatIsOwnedBySomeoneElse(){
+		// cashcard with id 102 has balance 150.00 and owner vishal
+		ResponseEntity<Void> response = restTemplate
+				.withBasicAuth("sarah", "abc123")
+				.exchange("cashcard/102",HttpMethod.DELETE,null,Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	void shouldNotDeleteACashCardThatDoesNotExist(){
+		// cashcard with id 102 has balance 150.00 and owner vishal
+		ResponseEntity<Void> response = restTemplate
+				.withBasicAuth("sarah", "abc123")
+				.exchange("cashcard/10200",HttpMethod.DELETE,null,Void.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
 }

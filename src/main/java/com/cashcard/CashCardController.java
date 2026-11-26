@@ -49,7 +49,9 @@ class CashCardController {
     }
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteCashCard(@PathVariable Long id, Principal principal){
-        this.cashCardService.deleteCashCard(id, principal.getName());
-        return ResponseEntity.noContent().build();
+        if(this.cashCardService.deleteCashCard(id, principal.getName()))
+            return ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
